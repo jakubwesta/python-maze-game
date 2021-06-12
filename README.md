@@ -10,5 +10,6 @@ If you don't have installed pygame - `pip install pygame`
 
 `python main.py`
 
-You should see a game window now. Move the player using WSAD and collect blue points in time.
+You should see a game window now. Move the player using WSAD or arrow keys and collect blue points in time.
 There are only 2 maps, but it is easy to add more.
+
