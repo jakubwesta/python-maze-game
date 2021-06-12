@@ -1,44 +1,58 @@
-import pygame as pg
 import sys
 import time
-from os import path
-from settings import *
 from sprites import *
+from os import path
 
 LEVEL = 1
 RESTARTED = 0
 
+
 def draw_time(surf, x, y, pct):
     if pct < 0:
         pct = 0
-    BAR_LENGTH = 100
-    BAR_HEIGHT = 20
     fill = pct * BAR_LENGTH
     outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
     fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
     fill_rect_no = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
-    
+
     col = (200 - pct * 200, pct * 200, 0)
-    
+
     pg.draw.rect(surf, WHITE, fill_rect_no)
     pg.draw.rect(surf, col, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
 
+
 def draw_points(surf, x, y, pct):
     if pct < 0:
         pct = 0
-    BAR_LENGTH = 100
-    BAR_HEIGHT = 20
     fill = pct * BAR_LENGTH
     outline_rect = pg.Rect(x + 100 + 2 * x, y, BAR_LENGTH, BAR_HEIGHT)
     fill_rect = pg.Rect(x + 100 + 2 * x, y, fill, BAR_HEIGHT)
     fill_rect_no = pg.Rect(x + 100 + 2 * x, y, BAR_LENGTH, BAR_HEIGHT)
-    
+
     col = (0, 0, 255)
-    
+
     pg.draw.rect(surf, WHITE, fill_rect_no)
     pg.draw.rect(surf, col, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
+
+
+def quit():
+    pg.quit()
+    sys.exit()
+
+
+def game_finished():
+    quit()
+    pass
+
+
+def restart():
+    if RESTARTED == 0:
+        initalize_2()
+    else:
+        initalize()
+
 
 class Game:
     def __init__(self):
@@ -66,7 +80,6 @@ class Game:
     def new(self):
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
-        self.ghosts = pg.sprite.Group()
         self.points = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             for col, tile in enumerate(tiles):
@@ -76,8 +89,6 @@ class Game:
                     self.player = Player(self, col, row)
                 if tile == '2':
                     Point(self, col, row)
-                if tile == 'g':
-                    Ghost(self, col, row, self.level)
 
     def run(self):
         self.playing = True
@@ -91,9 +102,8 @@ class Game:
             self.update()
             self.hits = pg.sprite.spritecollide(self.player, self.points, False)
             if self.hits:
-                print("TEST")
                 self.points.destroy_point
-                
+
             self.draw()
 
     def level_settings(self):
@@ -103,19 +113,6 @@ class Game:
         elif self.level == 2:
             self.time_level = 35
             self.level_points_max = 25
-        elif self.level == 3:
-            self.time_level = 35
-            self.level_points_max = 25
-        elif self.level == 4:
-            self.time_level = 35
-            self.level_points_max = 25
-        elif self.level == 5:
-            self.time_level = 35
-            self.level_points_max = 25
-
-    def quit(self):
-        pg.quit()
-        sys.exit()
 
     def update(self):
         self.all_sprites.update()
@@ -126,9 +123,9 @@ class Game:
             global LEVEL_AMOUNT
             LEVEL += 1
             if LEVEL > LEVEL_AMOUNT:
-                self.game_finished()
+                game_finished()
             else:
-                self.restart()
+                restart()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -138,7 +135,6 @@ class Game:
 
     def draw(self):
         self.screen.fill(BGCOLOR)
-        #self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.time_end = time.time()
         self.time_current = self.time_end - self.time_start
@@ -150,21 +146,18 @@ class Game:
                 initalize_2()
             else:
                 initalize()
-        #print(self.time_end - self.time_start)
-        #print(self.player.POINTS)
-        #print(self.player.POINTS)
         pg.display.flip()
 
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                self.quit()
+                quit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
-                    self.quit()
+                    quit()
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_BACKSPACE:
-                    self.restart()
+                    restart()
 
     def show_start_screen(self):
         pass
@@ -172,16 +165,6 @@ class Game:
     def show_go_screen(self):
         pass
 
-    def restart(self):
-        if RESTARTED == 0:
-            initalize_2()
-        else:
-            initalize()
-        
-    def game_finished(self):
-        print("FINISHED")
-        self.quit()
-        pass   
 
 def initalize_2():
     try:
@@ -200,6 +183,7 @@ def initalize_2():
             g.run()
             g.show_go_screen()
 
+
 def initalize():
     try:
         del g
@@ -215,9 +199,7 @@ def initalize():
         while True:
             g.new()
             g.run()
-            g.show_go_screen()      
-
+            g.show_go_screen()
 
 
 initalize()
-

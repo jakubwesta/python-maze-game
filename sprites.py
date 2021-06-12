@@ -1,6 +1,6 @@
 import pygame as pg
 from settings import *
-from os import path
+
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -55,25 +55,23 @@ class Player(pg.sprite.Sprite):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.points, True)
             if hits:
-                #print(hits)
                 if self.vx > 0:
                     self.POINTS += 1
-                    
+
                 if self.vx < 0:
                     self.POINTS += 1
-                    
+
                 self.vx = 0
                 self.rect.x = self.x
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.points, True)
             if hits:
-                #print(hits)
                 if self.vy > 0:
                     self.POINTS += 1
-                    
+
                 if self.vy < 0:
                     self.POINTS += 1
-                    
+
                 self.vy = 0
                 self.rect.y = self.y
 
@@ -89,8 +87,6 @@ class Player(pg.sprite.Sprite):
         self.collide_with_points('y')
 
 
-
-
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
@@ -103,8 +99,6 @@ class Wall(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
-
 
 
 class Point(pg.sprite.Sprite):
