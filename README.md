@@ -13,3 +13,5 @@ If you don't have installed pygame - `pip install pygame`
 You should see a game window now. Move the player using WSAD or arrow keys and collect blue points in time.
 There are only 2 maps, but it is easy to add more.
 
+https://github.com/makubas/python-maze-game/blob/main/image.png?raw=true
+![Image from game](https://github.com/makubas/python-maze-game/blob/main/image.png?raw=true)
